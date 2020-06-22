@@ -1,3 +1,4 @@
+include ':pointLibrary'
 include ':java'
 include ':app'
 rootProject.name = "ASJ Standalone Dev Kit"
