@@ -42,4 +42,19 @@ public class Point {
         this.x=x;
         this.y=y;
     }
+    public double distanceToPoint(Point other){
+        double deltaA = x - other.getX();
+        double deltaB = y - other.getY();
+
+        double distanceToPoint = Math.sqrt(deltaA*deltaA+deltaB*deltaB);
+        return distanceToPoint;
+    }
+    public Point closestPoint(Point [] pointsArray){
+        Point closestPoint = pointsArray[0];
+        for(int i = 1; i <= pointsArray.length; i++){
+            if(this.distanceToPoint(pointsArray[i]) < this.distanceToPoint(closestPoint)){
+                closestPoint = pointsArray[i];
+            }
+        }
+    }
 }

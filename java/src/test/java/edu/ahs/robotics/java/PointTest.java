@@ -27,4 +27,12 @@ public class PointTest {
         assertEquals("Axes",new Point(0,0).getQuadrant());
 
     }
+
+    @Test
+    public void distanceToPoint() {
+        Point a = new Point(1,1);
+        Point b = new Point(13, 6);
+
+        assertEquals(13, a.distanceToPoint(b), 0.00001);
+    }
 }
