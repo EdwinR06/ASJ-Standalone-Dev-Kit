@@ -51,10 +51,28 @@ public class Point {
     }
     public Point closestPoint(Point [] pointsArray){
         Point closestPoint = pointsArray[0];
-        for(int i = 1; i <= pointsArray.length; i++){
+        for(int i = 1; i < pointsArray.length; i++){
             if(this.distanceToPoint(pointsArray[i]) < this.distanceToPoint(closestPoint)){
                 closestPoint = pointsArray[i];
             }
         }
+        return closestPoint;
+    }
+    public static double distanceBetweenTwoPoints(Point a, Point b){
+        double distanceX = a.getX() - b.getX();
+        double distanceY = a.getY() - b.getY();
+
+        double distanceBetweenTwoPoint = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
+        return distanceBetweenTwoPoint;
+    }
+    public static Point midPoint(Point a, Point b){
+        double distanceX = a.getX() - b.getX();
+        double distanceY = a.getY() - b.getY();
+
+        double distanceBetweenTwoPointForMidPoint = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
+        double midPointLength = distanceBetweenTwoPointForMidPoint / 2;
+        Point midPoint = new Point(a.getX() + midPointLength, a.getY() + midPointLength);
+
+        return midPoint;
     }
 }

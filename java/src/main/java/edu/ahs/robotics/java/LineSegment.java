@@ -35,5 +35,14 @@ public class LineSegment {
         double length = Math.sqrt(a*a+b*b);
         return length;
     }
+    public Point interpolate(double distanceFromFirstPoint){
+       // double distanceX = point2.getX() - point1.getX();
+       // double distanceY = point2.getY() - point1.getY();
+
+        // double distanceFromTwoEndPoints = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
+
+        Point interpolate = new Point(point1.getX() + distanceFromFirstPoint, point1.getY() + distanceFromFirstPoint);
+        return interpolate;
+    }
 }
 

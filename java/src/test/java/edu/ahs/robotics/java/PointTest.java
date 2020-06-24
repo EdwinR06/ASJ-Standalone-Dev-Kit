@@ -35,4 +35,33 @@ public class PointTest {
 
         assertEquals(13, a.distanceToPoint(b), 0.00001);
     }
+    @Test
+    public void closestPoint(){
+        Point[] points = new Point[]{new Point(4,3), new Point(5,4), new Point(7, 5)};
+        Point a = new Point(-1, 4);
+        Point closestPointToA = a.closestPoint(points);
+
+        assertEquals(4, closestPointToA.getX(), 0.00001);
+        assertEquals(3, closestPointToA.getY(), 0.0001);
+    }
+
+    @Test
+    public void distanceBetweenTwoPoints() {
+        Point a = new Point (3, 6);
+        Point b = new Point (0,2);
+        double distanceBetweenPoints = Point.distanceBetweenTwoPoints(a, b);
+
+        assertEquals(5, distanceBetweenPoints, 0.00001);
+    }
+
+    @Test
+    public void midPoint() {
+        Point a = new Point (3, 4);
+        Point b = new Point (6, 8);
+
+        Point midPointActual = Point.midPoint(a, b);
+
+        assertEquals(5.5, midPointActual.getX(), 0.000001);
+        assertEquals(6.5, midPointActual.getY(), 0.000001);
+    }
 }

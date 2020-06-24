@@ -23,4 +23,15 @@ public class LineSegmentTest {
 
         }
     }
+
+    @Test
+    public void interpolate(int i) {
+        Point a = new Point(3, 6);
+        Point b = new Point(15,4);
+
+        Point interpolateActual = interpolate(3);
+
+        assertEquals
+
+    }
 }
