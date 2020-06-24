@@ -25,13 +25,14 @@ public class LineSegmentTest {
     }
 
     @Test
-    public void interpolate(int i) {
-        Point a = new Point(3, 6);
+    public void interpolate() {
+        Point a = new Point(6, 7);
         Point b = new Point(15,4);
+        LineSegment ls = new LineSegment(a, b);
 
-        Point interpolateActual = interpolate(3);
+        Point interpolateActual = ls.interpolate(3);
 
-        assertEquals
-
+        assertEquals(9, interpolateActual.getX(), 0.00001);
+        assertEquals(10, interpolateActual.getY(), 0.00001);
     }
 }
