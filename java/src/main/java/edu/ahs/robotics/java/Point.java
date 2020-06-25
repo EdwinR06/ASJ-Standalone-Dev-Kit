@@ -1,5 +1,8 @@
 package edu.ahs.robotics.java;
 
+import java.util.ArrayList;
+
+
 public class Point {
     private double x;
     private double y;
@@ -81,4 +84,6 @@ public class Point {
 
         return midPoint;
     }
+
 }
+

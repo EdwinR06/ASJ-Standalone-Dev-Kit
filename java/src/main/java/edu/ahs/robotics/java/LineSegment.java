@@ -1,13 +1,17 @@
 package edu.ahs.robotics.java;
 
+import java.util.ArrayList;
+
 public class LineSegment {
     //These  points are created to use within methods as place holders for the points called in tests and prints.
     private Point point1;
     private Point point2;
+    private double length;
 
     public LineSegment(Point point1, Point point2) {
         this.point1 = point1;
         this.point2 = point2;
+        this.length = Point.distanceBetweenTwoPoints(point1, point2);
     }
     // The Point[] below means that the method will return an array of points.
     public Point[] subDivide(int subSegments) {
@@ -27,23 +31,16 @@ public class LineSegment {
         return subDividedPoints;
 
     }
-    private double length() {
-        //This is the value for x2-x1
-        double a = point2.getX() - point1.getX();
-        //This is the value for y2-y1
-        double b = point2.getY() - point1.getY();
 
-        double length = Math.sqrt(a*a+b*b);
-        return length;
-    }
     public Point interpolate(double distanceFromFirstPoint){
-       // double distanceX = point2.getX() - point1.getX();
-       // double distanceY = point2.getY() - point1.getY();
+        double lineSegmentRatio = distanceFromFirstPoint / length;
 
-        // double distanceFromTwoEndPoints = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
+        Point interpolate = new Point(point1.getX() + (lineSegmentRatio * (point2.getX() - point1.getX())), point1.getY() + (lineSegmentRatio * (point2.getY() - point1.getY())));
 
-        Point interpolate = new Point(point1.getX() + distanceFromFirstPoint, point1.getY() + distanceFromFirstPoint);
+        // double xValue = point1.getX() + (lineSegmentRatio *  (point2.getX() - point)
+
         return interpolate;
     }
+
 }
 
