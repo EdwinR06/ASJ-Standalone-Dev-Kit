@@ -1,6 +1,7 @@
 package edu.ahs.robotics.java;
 
 public class LineSegment {
+    //These  points are created to use within methods as place holders for the points called in tests and prints.
     private Point point1;
     private Point point2;
 

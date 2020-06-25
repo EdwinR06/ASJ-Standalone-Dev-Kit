@@ -20,11 +20,13 @@ public class Point {
                 '}';
     }
     public double distanceFromOrigin(){
+        //This is the equation for finding the square root of a^2+b^2. Also, known as pythagorean theorem.
         double distance = Math.sqrt(x*x+y*y);
 
         return distance;
     }
     public String getQuadrant(){
+        //This determines what quadrant a given point is in.
         if(x > 0 && y > 0){
             return "Quadrant 1";
         } else if(x < 0 && y > 0){
@@ -43,9 +45,13 @@ public class Point {
         this.y=y;
     }
     public double distanceToPoint(Point other){
+        //This finds the change in x from one point to another.
         double deltaA = x - other.getX();
+
+        //This finds the change in y from one point to another.
         double deltaB = y - other.getY();
 
+        //This performs the Math.sqrt method on the change x and change in y. In addition, it stores that value in the double distance to Point.
         double distanceToPoint = Math.sqrt(deltaA*deltaA+deltaB*deltaB);
         return distanceToPoint;
     }

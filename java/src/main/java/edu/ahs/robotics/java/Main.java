@@ -5,6 +5,7 @@ public class Main {
         Point a = new Point(3,4);
         Point b = new Point(6, 8);
 
+        //This is for the line segment used in interpolate.
         Point p1 = new Point(0,0);
         Point p2 = new Point(4,5);
         LineSegment ls = new LineSegment(p1, p2);
