@@ -41,6 +41,5 @@ public class Main {
         // Collections.reverse(myList);
         // System.out.println(myList);
 
-        System.out.println(getMyArrayList());
     }
 }
