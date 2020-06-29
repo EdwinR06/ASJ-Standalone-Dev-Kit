@@ -9,18 +9,27 @@ public class Path {
     *                  A path must have at least 2 non-identical points
      */
     private ArrayList<WayPoint> pathWayPoints = new ArrayList<>();
+    List<WayPoint> wayPoints;
 
-    public Path(WayPoint[] rawPoints){
-        for (int i = 0; i < rawPoints.length; i++){
-            if (rawPoints[i] == rawPoints[i+1]){
-               pathWayPoints.add(rawPoints[i+1]);
-            } else {
-                pathWayPoints.add(rawPoints[i]);
+    public Path(Point[] rawPoints){
+
+        if(rawPoints.length < 2){
+            throw new IllegalArgumentException("Tried to create a path with too few points.");
+        }
+
+        wayPoints = new ArrayList<>();
+
+
+        WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0);
+        pathWayPoints.add(firstWayPoint);
+        for (int i = 1; i < rawPoints.length; i++){
+            if (!rawPoints[i].equals(rawPoints[i-1])){
+               pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX()-rawPoints[i-1].getX(), rawPoints[i].getY()-rawPoints[i-1].getY(), rawPoints[i].distanceToPoint(rawPoints[i-1])) );
             }
         }
     }
 
-    public List<WayPoint> getWayPoints(){
+    public ArrayList<WayPoint> getWayPoints(){
         return pathWayPoints;
     }
 
@@ -29,9 +38,14 @@ public class Path {
     /**
      * @return total distance of the path
      */
-    public double totalDistance(){
-        return 0.0;
+    public double totalDistance(Point[] pointsForDistance){
+
+        double totalDistanceBetweenTwoWayPoints = Point.distanceBetweenTwoPoints(pointsForDistance[0], pointsForDistance[1]);
+
+        return totalDistanceBetweenTwoWayPoints;
     }
+
+
 
 
 
@@ -39,9 +53,12 @@ public class Path {
      * @return a point at the supplied distance along the path from the supplied current position
      * Note that the point will usually be interpolated between the points that originally defined the Path
      */
-    public Path.WayPoint targetPoint(Point current, double distance) {
-        return new WayPoint(new Point(0,0));
+      public Path.WayPoint targetPoint(Point current, double distance) {
+        return new WayPoint(new Point(0,0), 0, 0, 0);
     }
+
+
+
 
     public static class WayPoint {
         public Point point;
@@ -55,22 +72,24 @@ public class Path {
             this.deltaYFromPrevious = deltaYFromPrevious;
             this.distanceFromPrevious = distanceFromPrevious;
         }
-    }
 
+        /**
+         * Calculates the projection of the vector Vcurrent leading from the supplied current
+         * point to this WayPoint onto the vector Vpath leading from the previous point on the path
+         * to this WayPoint.  If the return value is positive, it means that the WayPoint is
+         * farther along the path from the current point.  If the return value is negative, it means
+         * that the WayPoint is before the current point.  The magnitude of the value tells the
+         * distance along the path.  The value is computed as the dot product between Vcurrent and
+         * Vpath, normalized by the length of vPath
+         * @param current The source point to compare to the WayPoint
+         */
+        private double componentAlongPath(Point current) {
+            double deltaXFromCurrent = point.x - current.x;
+            double deltaYFromCurrent = point.y - current.y;
 
-    /**
-     * Calculates the projection in the direction of the path from the current point to the
-     * supplied WayPoint
-     * @param current The source point
-     * @param wayPoint A point on the path
-     * @return The dot product between vectors normalized by the length of the path segment leading to wayPoint
-     */
-    private double componentAlongPath(Point current, WayPoint wayPoint) {
-        double deltaXToWayPoint = wayPoint.point.x - current.x;
-        double deltaYToWayPoint = wayPoint.point.y - current.y;
-
-        double dp = deltaXToWayPoint * wayPoint.deltaXFromPrevious + deltaYToWayPoint * wayPoint.deltaYFromPrevious;
-        return dp / wayPoint.distanceFromPrevious;
+            double dp = deltaXFromCurrent * deltaXFromPrevious + deltaYFromCurrent * deltaYFromPrevious;
+            return dp / distanceFromPrevious;
+        }
     }
 
 }

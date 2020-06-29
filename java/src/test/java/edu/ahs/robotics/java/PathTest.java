@@ -2,6 +2,8 @@ package edu.ahs.robotics.java;
 
 import org.junit.Test;
 
+import java.awt.event.TextEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import edu.ahs.robotics.java.Path.WayPoint;
@@ -12,27 +14,71 @@ public class PathTest {
 
     @Test
     public void testDuplicatesRemoved() {
-        Point point1 = new Point(0,0);
-        Point point2 = new Point(3,4);
-        Point point3 = new Point(3,4);
-        Point point4 = new Point(5,5);
+        Point[] points = new Point[] {new Point(0,0), new Point(3,4), new Point(3,4), new Point(5,5)};
+        Path path = new Path(points);
 
-        WayPoint wayPoint1 = new WayPoint(point1, 0, 0, 0);
-        WayPoint wayPoint2 = new WayPoint(point2, 3, 4, 5);
-        WayPoint WayPoint3 = new WayPoint(point3, 0,0,0);
-        WayPoint wayPoint4 = new WayPoint(point4, 1,1, point4.distanceToPoint(point3));
+        ArrayList<Point> actual = new ArrayList<>();
 
+        ArrayList<Point> expected = new ArrayList<>();
+        expected.add(points[0]);
+        expected.add(points[1]);
+        expected.add(points[3]);
 
-        ArrayList<WayPoint> expectedReturnedWayPoints = new ArrayList<>();
-        expectedReturnedWayPoints.add(wayPoint1);
-        expectedReturnedWayPoints.add(wayPoint2);
-        expectedReturnedWayPoints.add(wayPoint4);
-
-        ArrayList<WayPoint> actualReturnedWayPoints = new WayPoint();
+        ArrayList<WayPoint> actualReturnedWayPoints = path.getWayPoints();
 
 
-        assertEquals(expectedReturnedWayPoints, actualReturnedWayPoints);
+        for (WayPoint w : actualReturnedWayPoints) {
+            actual.add(w.point);
+        }
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void totalDistance() {
+        Point[] points = new Point[] {new Point(3,4)};
+        Path path = new Path(points);
+
+        assertEquals(5, path.totalDistance(points), 0.00001);
 
 
+
+        /* Point[] points2 = new Point[] {new Point(0,0), new Point(24,10)};
+        Path path2 = new Path(points);
+
+        assertEquals(26, path.totalDistance(points2), 0.00001);
+
+
+
+        Point[] points3 = new Point[] {new Point(0,0), new Point(1,1.73205080757)};
+        Path path3 = new Path(points);
+
+        assertEquals(2, path.totalDistance(points3), 0.00001);
+
+
+
+        Point[] points4 = new Point[] {new Point(0,0), new Point(0,0)};
+        Path path4 = new Path(points);
+
+        assertEquals(0, path.totalDistance(points4), 0.00001); */
+    }
+
+    @Test
+    public void testIllegalArgumentException() {
+        try{
+            Point[] points = new Point[] {new Point(2,5), new Point(4, 5)};
+            Path path = new Path(points);
+            fail("Expected Illegal Argument Exception");
+        } catch (IllegalArgumentException e){
+            // What we wanted
+        }
+    }
+
+    @Test
+    public void testTargetPoint() {
+        Point current = new Point(0,0);
+        double distanceToMoveAlongPath = 5;
+
+        Point actual = new Point(0,0);
     }
 }
