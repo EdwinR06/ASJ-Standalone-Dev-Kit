@@ -40,21 +40,25 @@ public class ArrayListManipulation {
 
 
     public static ArrayList<Integer> removeLargestInteger(ArrayList <Integer> other) {
-
-        ArrayList<Integer> myFinalArray = new ArrayList<>();
-        int biggestNumberTwo = 0;
+        if(other.size() == 0){
+            throw new IllegalArgumentException("Must have at least one element.");
+        }
+        ArrayList<Integer> retVal = new ArrayList<>();
+        //int largest = Integer.MIN_VALUE;
+        int largest = other.get(0);
         for (int i = 0; i < other.size(); i++) {
-            if (other.get(i) > biggestNumberTwo) {
-                if (biggestNumberTwo != 0){
-                    myFinalArray.add(biggestNumberTwo);
-                }
-                biggestNumberTwo = other.get(i);
-            } else {
-                myFinalArray.add(other.get(i));
+            if (other.get(i) > largest) {
+                largest = other.get(i);
             }
         }
-        Collections.sort(myFinalArray);
-        return myFinalArray;
+
+        for (int i = 0; i < other.size(); i++) {
+            if (other.get(i) < largest) {
+                retVal.add(other.get(i));
+            }
+        }
+
+        return retVal;
     }
 
 

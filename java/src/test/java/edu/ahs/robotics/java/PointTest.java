@@ -64,4 +64,19 @@ public class PointTest {
         assertEquals(5.5, midPointActual.getX(), 0.000001);
         assertEquals(6.5, midPointActual.getY(), 0.000001);
     }
+
+    // @Test
+    /* public void testClosestWayPoint() {
+        Point[] points = new Point[]{new Point(0,0), new Point(1,1), new Point(1,1), new Point(5,5)};
+        Path path = new Path(points);
+
+        Point a = new Point(4,4);
+
+        Point expected = new Point(5,5);
+
+        Point actual = new Point(a.closestWayPoint(path.getWayPoints()));
+
+        assertEquals(expected, actual);
+
+    }*/
 }

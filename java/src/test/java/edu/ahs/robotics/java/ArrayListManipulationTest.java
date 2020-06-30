@@ -11,22 +11,22 @@ public class ArrayListManipulationTest {
     @Test
     public void testRemoveLargestInteger() {
         ArrayList<Integer> myArrayList = new ArrayList<Integer>();
-        myArrayList.add(4);
-        myArrayList.add(1);
-        myArrayList.add(-5);
-        myArrayList.add(12);
-        myArrayList.add(13);
-        myArrayList.add(15);
+        //myArrayList.add(-1);
+        //myArrayList.add(-1);
+        //myArrayList.add(-1);
+        //myArrayList.add(-9);
+        //myArrayList.add(-3);
+        // myArrayList.add(-15);
 
         ArrayList<Integer> expectedReturnedArrayList = new ArrayList<Integer>();
 
-        expectedReturnedArrayList.add(-5);
-        expectedReturnedArrayList.add(1);
-        expectedReturnedArrayList.add(4);
-        expectedReturnedArrayList.add(12);
-        expectedReturnedArrayList.add(13);
+        /*expectedReturnedArrayList.add(-3);
+        expectedReturnedArrayList.add(-2);
+        expectedReturnedArrayList.add(-9);
+        expectedReturnedArrayList.add(-3);
+        //expectedReturnedArrayList.add(-15);*/
 
-        ArrayList<Integer> actualReturnedArrayList = new ArrayList<Integer>(ArrayListManipulation.removeLargestInteger(myArrayList));
+        ArrayList<Integer> actualReturnedArrayList = ArrayListManipulation.removeLargestInteger(myArrayList);
 
         assertEquals(expectedReturnedArrayList, actualReturnedArrayList);
     }

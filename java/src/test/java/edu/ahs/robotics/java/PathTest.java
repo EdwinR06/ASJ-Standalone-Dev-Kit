@@ -66,7 +66,7 @@ public class PathTest {
     @Test
     public void testIllegalArgumentException() {
         try{
-            Point[] points = new Point[] {new Point(2,5), new Point(4, 5)};
+            Point[] points = new Point[] {new Point(2,5), new Point(4,4)};
             Path path = new Path(points);
             fail("Expected Illegal Argument Exception");
         } catch (IllegalArgumentException e){
@@ -76,9 +76,17 @@ public class PathTest {
 
     @Test
     public void testTargetPoint() {
-        Point current = new Point(0,0);
-        double distanceToMoveAlongPath = 5;
+        Point current = new Point(3,4);
+        Point[] points = new Point[] {new Point(3,4), new Point(5,5)};
+        Path path = new Path(points);
 
-        Point actual = new Point(0,0);
+        WayPoint actual = path.targetPoint(current, 0);
+        Point actualPoint = actual.point;
+
+        assertEquals(current, actualPoint);
+
+
+
+
     }
 }

@@ -54,8 +54,35 @@ public class Path {
      * Note that the point will usually be interpolated between the points that originally defined the Path
      */
       public Path.WayPoint targetPoint(Point current, double distance) {
-        return new WayPoint(new Point(0,0), 0, 0, 0);
-    }
+          boolean isCurrentPointAWayPoint;
+
+          for(int i = 0; i < pathWayPoints.size(); i++){
+            if(current.equals(pathWayPoints.get(i))){
+                isCurrentPointAWayPoint = true;
+            } else {
+                isCurrentPointAWayPoint = false;
+            }
+          }
+
+
+          if(isCurrentPointAWayPoint = true){
+              for(int i = 0; i < pathWayPoints.size(); i++){
+                if(current.equals(pathWayPoints.get(i))){
+                    LineSegment pathSegment = new LineSegment(current, pathWayPoints.get(i).point);
+
+                    Point newTargetPointFromCurrentWayPoint = pathSegment.interpolate(distance);
+                }
+              }
+          } else {
+
+
+              Point newTargetPointFromCurrentPoint;
+          }
+
+
+          WayPoint targetWayPoint = new WayPoint(new Point(0,0), 0, 0, 0);
+          return targetWayPoint;
+     }
 
 
 
@@ -91,5 +118,4 @@ public class Path {
             return dp / distanceFromPrevious;
         }
     }
-
 }
