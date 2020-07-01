@@ -99,14 +99,14 @@ public class Point {
 
         return midPoint;
     }
-    public Point closestWayPoint(ArrayList <Path.WayPoint> wayPointArray){
-        Point closestWayPoint = wayPointArray.get(0).point;
-        for(int i = 1; i < wayPointArray.size(); i++){
-            if(this.distanceToPoint(wayPointArray.get(i).point) < this.distanceToPoint(closestWayPoint)){
-                closestWayPoint = wayPointArray.get(i).point;
+    public Point closestWayPoint(ArrayList <Path.WayPoint> closestWayPoint){
+        Point closestWayPoint1 = closestWayPoint.get(0).point;
+        for(int i = 1; i < closestWayPoint.size(); i++){
+            if(this.distanceToPoint(closestWayPoint.get(i).point) < this.distanceToPoint(closestWayPoint1)){
+                closestWayPoint1 = closestWayPoint.get(i).point;
             }
         }
-        return closestWayPoint;
+        return closestWayPoint1;
     }
 
 }

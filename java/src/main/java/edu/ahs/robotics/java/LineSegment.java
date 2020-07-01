@@ -6,7 +6,7 @@ public class LineSegment {
     //These  points are created to use within methods as place holders for the points called in tests and prints.
     private Point point1;
     private Point point2;
-    private double length;
+    public double length;
 
     public LineSegment(Point point1, Point point2) {
         this.point1 = point1;
