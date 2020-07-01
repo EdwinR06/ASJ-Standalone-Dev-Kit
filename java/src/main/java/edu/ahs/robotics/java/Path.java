@@ -94,7 +94,7 @@ public class Path {
                         }
 
                         Point targetPointFromPreviousWayPoint = pathSegment.interpolate(nextLineSegmentDistance);
-
+                        //
                         WayPoint newTargetFartherAlongPath;
                         if(whatI = true){
                             newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance)
