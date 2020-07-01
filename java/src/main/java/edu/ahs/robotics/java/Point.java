@@ -108,6 +108,5 @@ public class Point {
         }
         return closestWayPoint1;
     }
-
 }
 

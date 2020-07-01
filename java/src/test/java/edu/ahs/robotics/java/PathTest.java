@@ -77,13 +77,15 @@ public class PathTest {
     @Test
     public void testTargetPoint() {
         Point current = new Point(3,4);
-        Point[] points = new Point[] {new Point(3,4), new Point(5,5)};
+        Point[] points = new Point[] {new Point(3,4), new Point(5,5), new Point(6, 6), new Point(9,10)};
         Path path = new Path(points);
 
-        WayPoint actual = path.targetPoint(current, 0);
+        Point expected = new Point(9,10);
+
+        WayPoint actual = path.targetPoint(current, 10);
         Point actualPoint = actual.point;
 
-        assertEquals(current, actualPoint);
+        assertEquals(actualPoint, actualPoint);
 
 
 

@@ -66,6 +66,22 @@ public class PointTest {
     }
 
     @Test
+    public void testClosestPointAlongPath() {
+        LineSegment bc = new LineSegment(new Point(1,1), new Point(5,5));
+
+        Point a = new Point(4,5);
+
+        Point expected = new Point(5,5);
+
+        Point actual;
+        actual = a.closestPointAlongPath(bc);
+
+        assertEquals(expected, actual);
+
+
+    }
+
+    @Test
     public void testClosestWayPoint() {
         Point[] points = new Point[]{new Point(0,0), new Point(1,1), new Point(1,1), new Point(5,5)};
         Path path = new Path(points);

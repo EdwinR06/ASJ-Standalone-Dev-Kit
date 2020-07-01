@@ -65,6 +65,7 @@ public class Path {
           }
 
           WayPoint newTargetWayPointFromCurrentWayPoint;
+          WayPoint newTargetFartherAlongPath = new WayPoint(new Point(0,0),0,0,0);
           // WayPoint
           if(isCurrentPointAWayPoint = true){
               for(int i = 0; i < pathWayPoints.size(); i++){
@@ -94,13 +95,12 @@ public class Path {
                         }
 
                         Point targetPointFromPreviousWayPoint = pathSegment.interpolate(nextLineSegmentDistance);
-                        //
-                        WayPoint newTargetFartherAlongPath;
+
                         if(whatI = true){
-                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance)
+                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
 
                         } else {
-                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance)
+                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
                         }
 
                     } else {
@@ -117,8 +117,13 @@ public class Path {
               WayPoint newTargetPointFromCurrentPoint = new WayPoint( new Point(0,0),0, 0, 0);
           }
 
+          if(){
 
-          WayPoint targetWayPoint = new WayPoint(new Point(0,0), 0, 0, 0);
+          }
+
+
+          WayPoint targetWayPoint = newTargetFartherAlongPath;
+          // WayPoint targetWayPoint = new WayPoint(newTargetFartherAlongPath.point, newTargetFartherAlongPath.deltaXFromPrevious, newTargetFartherAlongPath.deltaYFromPrevious, newTargetFartherAlongPath.distanceFromPrevious);
           return targetWayPoint;
      }
 
