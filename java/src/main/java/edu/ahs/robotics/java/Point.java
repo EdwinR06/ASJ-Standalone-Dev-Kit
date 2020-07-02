@@ -3,6 +3,8 @@ package edu.ahs.robotics.java;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.sound.sampled.Line;
+
 
 public class Point {
     public double x;
@@ -107,6 +109,10 @@ public class Point {
             }
         }
         return closestWayPoint1;
+    }
+    public Point closestPointAlongPath(LineSegment other){
+
+        return new Point(0,0);
     }
 }
 

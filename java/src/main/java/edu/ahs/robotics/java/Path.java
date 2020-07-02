@@ -63,7 +63,7 @@ public class Path {
                 isCurrentPointAWayPoint = false;
             }
           }
-
+          WayPoint newTargetPointFromCurrentPoint = new WayPoint(new Point(0,0), 0, 0, 0);
           WayPoint newTargetWayPointFromCurrentWayPoint;
           WayPoint newTargetFartherAlongPath = new WayPoint(new Point(0,0),0,0,0);
           // WayPoint
@@ -114,17 +114,21 @@ public class Path {
           } else {
               Point currentClosestWayPoint = current.closestWayPoint(pathWayPoints);
 
-              WayPoint newTargetPointFromCurrentPoint = new WayPoint( new Point(0,0),0, 0, 0);
+              newTargetPointFromCurrentPoint = new WayPoint(new Point(0,0),0, 0, 0);
           }
 
-          if(){
-
+          if(isCurrentPointAWayPoint = true){
+              WayPoint targetWayPoint = newTargetFartherAlongPath;
+              return targetWayPoint;
+          } else {
+              WayPoint targetWayPoint = newTargetPointFromCurrentPoint;
+              return  targetWayPoint;
           }
 
 
-          WayPoint targetWayPoint = newTargetFartherAlongPath;
-          // WayPoint targetWayPoint = new WayPoint(newTargetFartherAlongPath.point, newTargetFartherAlongPath.deltaXFromPrevious, newTargetFartherAlongPath.deltaYFromPrevious, newTargetFartherAlongPath.distanceFromPrevious);
-          return targetWayPoint;
+
+
+
      }
 
 
@@ -132,9 +136,9 @@ public class Path {
 
     public static class WayPoint {
         public Point point;
-        private double deltaXFromPrevious;
-        private double deltaYFromPrevious;
-        private double distanceFromPrevious;
+        public double deltaXFromPrevious;
+        public double deltaYFromPrevious;
+        public double distanceFromPrevious;
 
         public WayPoint(Point point, double deltaXFromPrevious, double deltaYFromPrevious, double distanceFromPrevious) {
             this.point = point;
