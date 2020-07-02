@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Path {
     /**
-     *@param rawPoints Array of X,Y points.  Duplicate points are discarded
-    *                  A path must have at least 2 non-identical points
+     * @param rawPoints Array of X,Y points.  Duplicate points are discarded
+     * A path must have at least 2 non-identical points
      */
     private ArrayList<WayPoint> pathWayPoints = new ArrayList<>();
     List<WayPoint> wayPoints;
 
-    public Path(Point[] rawPoints){
+    public Path(Point[] rawPoints) {
 
-        if(rawPoints.length < 2){
+        if (rawPoints.length < 2) {
             throw new IllegalArgumentException("Tried to create a path with too few points.");
         }
 
@@ -22,114 +22,124 @@ public class Path {
 
         WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0);
         pathWayPoints.add(firstWayPoint);
-        for (int i = 1; i < rawPoints.length; i++){
-            if (!rawPoints[i].equals(rawPoints[i-1])){
-               pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX()-rawPoints[i-1].getX(), rawPoints[i].getY()-rawPoints[i-1].getY(), rawPoints[i].distanceToPoint(rawPoints[i-1])) );
+        for (int i = 1; i < rawPoints.length; i++) {
+            if (!rawPoints[i].equals(rawPoints[i - 1])) {
+                pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX() - rawPoints[i - 1].getX(), rawPoints[i].getY() - rawPoints[i - 1].getY(), rawPoints[i].distanceToPoint(rawPoints[i - 1])));
             }
         }
     }
 
-    public ArrayList<WayPoint> getWayPoints(){
+    public ArrayList<WayPoint> getWayPoints() {
         return pathWayPoints;
     }
-
 
 
     /**
      * @return total distance of the path
      */
-    public double totalDistance(Point[] pointsForDistance){
+    public double totalDistance() {
+        double totalDistanceBetweenTwoWayPoints = 0;
+        for (int i = 0; i < pathWayPoints.size() - 1; i++) {
 
-        double totalDistanceBetweenTwoWayPoints = Point.distanceBetweenTwoPoints(pointsForDistance[0], pointsForDistance[1]);
+            totalDistanceBetweenTwoWayPoints += Point.distanceBetweenTwoPoints(pathWayPoints.get(i).point, pathWayPoints.get(i+1).point);
 
+
+        }
         return totalDistanceBetweenTwoWayPoints;
     }
-
-
-
 
 
     /**
      * @return a point at the supplied distance along the path from the supplied current position
      * Note that the point will usually be interpolated between the points that originally defined the Path
      */
-      public Path.WayPoint targetPoint(Point current, double distance) {
-          boolean isCurrentPointAWayPoint;
+    public Path.WayPoint targetPoint(Point current, double distance) {
+        boolean isCurrentPointAWayPoint;
+        WayPoint endOfPath = pathWayPoints.get(pathWayPoints.size() - 1);
 
-          for(int i = 0; i < pathWayPoints.size(); i++){
-            if(current.equals(pathWayPoints.get(i).point)){
+        for (int i = 0; i < pathWayPoints.size(); i++) {
+            if (current.equals(pathWayPoints.get(i).point)) {
                 isCurrentPointAWayPoint = true;
             } else {
                 isCurrentPointAWayPoint = false;
             }
-          }
-          WayPoint newTargetPointFromCurrentPoint = new WayPoint(new Point(0,0), 0, 0, 0);
-          WayPoint newTargetWayPointFromCurrentWayPoint;
-          WayPoint newTargetFartherAlongPath = new WayPoint(new Point(0,0),0,0,0);
-          // WayPoint
-          if(isCurrentPointAWayPoint = true){
-              for(int i = 0; i < pathWayPoints.size(); i++){
-                if(current.equals(pathWayPoints.get(i).point)){
+        }
+        WayPoint newTargetPointFromCurrentPoint = new WayPoint(new Point(0, 0), 0, 0, 0);
+        WayPoint newTargetWayPointFromCurrentWayPoint = new WayPoint(new Point(0,0), 0, 0, 0);
+        WayPoint targetWayPoint;
+        WayPoint newTargetFartherAlongPath = new WayPoint(new Point(0, 0), 0, 0, 0);
+        double startingWayPoint;
+        // WayPoint
+        if (isCurrentPointAWayPoint = true) {
+            for (int i = 0; i < pathWayPoints.size(); i++) {
+                if (current.equals(pathWayPoints.get(i).point)) {
 
-                    LineSegment pathSegment = new LineSegment(current, pathWayPoints.get(i+1).point);
+                    LineSegment pathSegment = new LineSegment(current, pathWayPoints.get(i + 1).point);
 
-                    if(distance > pathSegment.length){
+                    if (distance > pathSegment.length) {
 
                         double nextLineSegmentDistance = -1 * (pathSegment.length - distance);
 
-                        Point partialInterpolationToTargetPoint = new Point(pathWayPoints.get(i+1).point.getX(), pathWayPoints.get(i+1).point.getY());
+                        Point partialInterpolationToTargetPoint = new Point(pathWayPoints.get(i + 1).point.getX(), pathWayPoints.get(i + 1).point.getY());
 
-                        pathSegment = new LineSegment(partialInterpolationToTargetPoint, pathWayPoints.get(i+2).point);
+                        pathSegment = new LineSegment(partialInterpolationToTargetPoint, pathWayPoints.get(i + 2).point);
 
                         boolean whatI = false;
 
-                        while(nextLineSegmentDistance > pathSegment.length){
+                        while (nextLineSegmentDistance > pathSegment.length) {
 
                             nextLineSegmentDistance = -1 * (pathSegment.length - distance);
 
-                            partialInterpolationToTargetPoint = new Point(pathWayPoints.get(i+2).point.getX(), pathWayPoints.get(i+2).point.getY());
+                            partialInterpolationToTargetPoint = new Point(pathWayPoints.get(i + 2).point.getX(), pathWayPoints.get(i + 2).point.getY());
 
-                            pathSegment = new LineSegment(partialInterpolationToTargetPoint, pathWayPoints.get(i+3).point);
+                            pathSegment = new LineSegment(partialInterpolationToTargetPoint, pathWayPoints.get(i + 3).point);
 
-                            
+
                         }
 
                         Point targetPointFromPreviousWayPoint = pathSegment.interpolate(nextLineSegmentDistance);
 
-                        if(whatI = true){
-                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
+                        if (whatI = true) {
+                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i + 3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i + 3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
 
                         } else {
-                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i+3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i+3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
+                            newTargetFartherAlongPath = new WayPoint(targetPointFromPreviousWayPoint, pathWayPoints.get(i + 3).point.getX() - partialInterpolationToTargetPoint.getX(), pathWayPoints.get(i + 3).point.getY() - partialInterpolationToTargetPoint.getY(), nextLineSegmentDistance);
                         }
 
                     } else {
 
                         Point newTargetPointFromCurrentWayPoint = pathSegment.interpolate(distance);
 
-                        newTargetWayPointFromCurrentWayPoint = new WayPoint(newTargetPointFromCurrentWayPoint,pathWayPoints.get(i+1).point.getX() - current.x,pathWayPoints.get(i+1).point.getY() - current.y, distance);
+                        newTargetWayPointFromCurrentWayPoint = new WayPoint(newTargetPointFromCurrentWayPoint, pathWayPoints.get(i + 1).point.getX() - current.x, pathWayPoints.get(i + 1).point.getY() - current.y, distance);
                     }
                 }
+            }
+        } else {
+            for (int i = 0; i < pathWayPoints.size() - 1; i++) {
+                startingWayPoint = pathWayPoints.get(i).componentAlongPath(current);
+            }
+
+            Point currentClosestWayPoint = current.closestWayPoint(pathWayPoints);
+
+            newTargetWayPointFromCurrentWayPoint = new WayPoint(new Point(0, 0), 0, 0, 0);
+        }
+
+        if(isCurrentPointAWayPoint = true){
+            if(current == endOfPath.point){
+                return endOfPath;
+            } else {
+                targetWayPoint = newTargetFartherAlongPath;
+            }
+        } else {
+            if(current == endOfPath.point){
+                return endOfPath;
+            } else {
+                targetWayPoint = newTargetWayPointFromCurrentWayPoint;
               }
-          } else {
-              Point currentClosestWayPoint = current.closestWayPoint(pathWayPoints);
+        }
+        return targetWayPoint;
+    }
 
-              newTargetPointFromCurrentPoint = new WayPoint(new Point(0,0),0, 0, 0);
-          }
-
-          if(isCurrentPointAWayPoint = true){
-              WayPoint targetWayPoint = newTargetFartherAlongPath;
-              return targetWayPoint;
-          } else {
-              WayPoint targetWayPoint = newTargetPointFromCurrentPoint;
-              return  targetWayPoint;
-          }
-
-
-
-
-
-     }
 
 
 

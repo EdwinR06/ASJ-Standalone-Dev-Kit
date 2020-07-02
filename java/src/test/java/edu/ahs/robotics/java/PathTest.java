@@ -49,36 +49,36 @@ public class PathTest {
 
     @Test
     public void totalDistance() {
-       Point[] points = new Point[] {new Point(3,4)};
+       Point[] points = new Point[] {new Point(3,4), new Point(8, 4), new Point(18, 28)};
        Path path = new Path(points);
 
-        assertEquals(5, path.totalDistance(points), 0.00001);
+        assertEquals(31, path.totalDistance(), 0.00001);
 
 
 
-        Point[] points2 = new Point[] {new Point(0,0), new Point(24,10)};
+        Point[] points2 = new Point[] {new Point(0,0), new Point(24,10), new Point(27, 14)};
         Path path2 = new Path(points2);
 
-        assertEquals(26, path2.totalDistance(points2), 0.00001);
+        assertEquals(31, path2.totalDistance(), 0.00001);
 
 
 
-        Point[] points3 = new Point[] {new Point(0,0), new Point(1,1.73205080757)};
+        Point[] points3 = new Point[] {new Point(-3, -4),new Point(0,0), new Point(1,1.73205080757)};
         Path path3 = new Path(points3);
 
-        assertEquals(2, path3.totalDistance(points3), 0.00001);
+        assertEquals(7, path3.totalDistance(), 0.00001);
 
 
 
-        Point[] points4 = new Point[] {new Point(0,0), new Point(0,0)};
+        Point[] points4 = new Point[] {new Point(0,0), new Point(0,0), new Point(0,0)};
         Path path4 = new Path(points4);
 
-        assertEquals(0, path4.totalDistance(points4), 0.00001);
+        assertEquals(0, path4.totalDistance(), 0.00001);
 
     }
 
     @Test
-    public void testIllegalArgumentException() {
+    public void testInvalidArgumentOfPath() {
         try{
             Point[] points = new Point[] {new Point(2,5), new Point(4,4)};
             Path path = new Path(points);
