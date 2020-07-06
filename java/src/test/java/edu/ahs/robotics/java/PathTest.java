@@ -99,7 +99,19 @@ public class PathTest {
         WayPoint actual = path.targetPoint(current, 10);
         Point actualPoint = actual.point;
 
-        assertEquals(actualPoint, actualPoint);
+        assertEquals(expected, actualPoint);
+
+
+        Point current1 = new Point(3,4);
+        Point[] points2 = new Point[] {new Point(3,4), new Point(4,4), new Point(4, 6), new Point(15,6)};
+        Path path2 = new Path(points2);
+
+        Point expected2 = new Point(6,6);
+
+        WayPoint actual2 = path2.targetPoint(current, 5);
+        Point actualPoint2 = actual2.point;
+
+        assertEquals(expected2, actualPoint2);
 
 
 
