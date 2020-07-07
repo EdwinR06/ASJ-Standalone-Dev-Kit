@@ -17,17 +17,22 @@ public class Path {
             throw new IllegalArgumentException("Tried to create a path with too few points.");
         }
 
+
         wayPoints = new ArrayList<>();
 
 
-        WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0);
+        WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0, 0, 0);
         pathWayPoints.add(firstWayPoint);
         for (int i = 1; i < rawPoints.length; i++) {
+            double distanceFromPreviousWayPoint = rawPoints[i].distanceToPoint(rawPoints[i - 1]);
+            double distanceToStart = 0;
+            distanceToStart += distanceFromPreviousWayPoint;
             if (!rawPoints[i].equals(rawPoints[i - 1])) {
                 pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX() - rawPoints[i - 1].getX(), rawPoints[i].getY() - rawPoints[i - 1].getY(), rawPoints[i].distanceToPoint(rawPoints[i - 1])));
             }
         }
     }
+
 
     public ArrayList<WayPoint> getWayPoints() {
         return pathWayPoints;
@@ -242,12 +247,16 @@ public class Path {
         public double deltaXFromPrevious;
         public double deltaYFromPrevious;
         public double distanceFromPrevious;
+        public double distanceFromStart;
+        public double distanceFromEnd;
 
-        public WayPoint(Point point, double deltaXFromPrevious, double deltaYFromPrevious, double distanceFromPrevious) {
+        public WayPoint(Point point, double deltaXFromPrevious, double deltaYFromPrevious, double distanceFromPrevious, double distanceFromStart, double distanceFromEnd) {
             this.point = point;
             this.deltaXFromPrevious = deltaXFromPrevious;
             this.deltaYFromPrevious = deltaYFromPrevious;
             this.distanceFromPrevious = distanceFromPrevious;
+            this.distanceFromStart = distanceFromStart;
+            this.distanceFromEnd = distanceFromEnd;
         }
 
         /**
