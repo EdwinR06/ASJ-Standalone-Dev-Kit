@@ -48,12 +48,36 @@ public class Path {
         return totalDistanceBetweenTwoWayPoints;
     }
 
-
     /**
      * @return a point at the supplied distance along the path from the supplied current position
      * Note that the point will usually be interpolated between the points that originally defined the Path
      */
     public WayPoint targetPoint(Point current, double targetDistance) {
+        int i = 1;
+        while (pathWayPoints.get(i).componentAlongPath(current) < 0) {
+            i++;
+            if (i == pathWayPoints.size() - 1) {
+                return pathWayPoints.get(i);
+            }
+        }
+        double remainingDistance;
+        remainingDistance = targetDistance - pathWayPoints.get(i).componentAlongPath(current);
+        while (remainingDistance > 0 && i < pathWayPoints.size() - 1) {
+            i++;
+            remainingDistance -= pathWayPoints.get(i).distanceFromPrevious;
+
+        }
+        remainingDistance += pathWayPoints.get(i).distanceFromPrevious;
+        Point firstWayPointForInterpolation = pathWayPoints.get(i - 1).point;
+        Point secondWayPointForInterpolation = pathWayPoints.get(i).point;
+        LineSegment ls = new LineSegment(firstWayPointForInterpolation, secondWayPointForInterpolation);
+        Point target = ls.interpolate(remainingDistance);
+
+        return new WayPoint(target, target.getX() - firstWayPointForInterpolation.getX(), target.getY() - secondWayPointForInterpolation.getY(), remainingDistance);
+    }
+
+
+    /*public WayPoint targetPoint(Point current, double targetDistance) {
 
         // First, find the next WayPoint along the path
         int nextWayPoint = findNextWayPoint(current);
@@ -62,13 +86,13 @@ public class Path {
         WayPoint targetWayPoint;
         double distanceSoFar = pathWayPoints.get(nextWayPoint).componentAlongPath(current);
         int found = nextWayPoint - 1;
-        while(distanceSoFar < targetDistance && found < pathWayPoints.size() - 1) {
+        while (distanceSoFar < targetDistance && found < pathWayPoints.size() - 1) {
             distanceSoFar += pathWayPoints.get(found).distanceFromPrevious;
             found++;
         }
 
         // Interpolate between that Waypoint and the one before
-        if(distanceSoFar < targetDistance){
+        if (distanceSoFar < targetDistance) {
             //We ran off the end of the path before exceeding the target distance
             targetWayPoint = pathWayPoints.get(found);
         } else {
@@ -193,26 +217,24 @@ public class Path {
             return endOfPath;
         }
         return targetWayPoint;*/
-    }
+
 
     /**
      * Find the index of the WayPoint that is just ahead of current on the path
+     *
      * @param current
      * @return
      */
     private int findNextWayPoint(Point current) {
         int iNextWayPoint = 0;
         for (int i = 0; i < pathWayPoints.size(); i++) {
-            if(pathWayPoints.get(i).componentAlongPath(current) > 0){
+            if (pathWayPoints.get(i).componentAlongPath(current) > 0) {
                 iNextWayPoint = i;
                 break;
             }
         }
         return iNextWayPoint;
     }
-
-
-
 
 
     public static class WayPoint {
@@ -244,7 +266,15 @@ public class Path {
             double deltaYFromCurrent = point.y - current.y;
 
             double dp = deltaXFromCurrent * deltaXFromPrevious + deltaYFromCurrent * deltaYFromPrevious;
-            return dp / distanceFromPrevious;
+            double projection = dp / distanceFromPrevious;
+
+            if(projection < 0){
+                return 0;
+            }else if(projection > distanceFromPrevious){
+                return distanceFromPrevious;
+            }else{
+                return projection;
+            }
         }
     }
 }
