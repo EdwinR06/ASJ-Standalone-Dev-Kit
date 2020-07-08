@@ -12,7 +12,7 @@ public class PathTest {
 
     @Test
     public void testDuplicatesRemoved() {
-        Point[] points = new Point[] {new Point(0,0), new Point(3,4), new Point(3,4), new Point(5,5)};
+        Point[] points = new Point[] {new Point(0,0), new Point(3,4), new Point(3,4), new Point(6,8)};
         Path path = new Path(points);
 
         ArrayList<Point> actual = new ArrayList<>();
@@ -36,10 +36,13 @@ public class PathTest {
                 assertEquals(0, path.getWayPoints().get(i).deltaXFromPrevious, 0.00001);
                 assertEquals(0, path.getWayPoints().get(i).deltaYFromPrevious, 0.000001);
                 assertEquals(0, path.getWayPoints().get(i).distanceFromPrevious, 0.000001);
+                assertEquals(0, path.getWayPoints().get(i).distanceFromStart, 0.000001);
+                assertEquals(10, path.getWayPoints().get(i).distanceFromEnd, 0.000001);
             } else {
                 assertEquals(expected.get(i).getX()-expected.get(i-1).getX(), path.getWayPoints().get(i).deltaXFromPrevious, 0.00001);
                 assertEquals(expected.get(i).getY()-expected.get(i-1).getY(), path.getWayPoints().get(i).deltaYFromPrevious, 0.00001);
                 assertEquals(Point.distanceBetweenTwoPoints(expected.get(i), expected.get(i-1)), path.getWayPoints().get(i).distanceFromPrevious, 0.00001);
+                assertEquals();
             }
         }
 

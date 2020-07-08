@@ -40,6 +40,5 @@ public class Main {
         // String message = myList.get(0);
         // Collections.reverse(myList);
         // System.out.println(myList);
-
     }
 }
