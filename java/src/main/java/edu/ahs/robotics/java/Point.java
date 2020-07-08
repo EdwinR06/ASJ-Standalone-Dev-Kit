@@ -123,13 +123,7 @@ public class Point {
         return new Point(0, 0);
     }
 
-    public double totalDistanceOfPath(Point[] rawPoints){
-        double totalDistanceOfPath = 0;
-        for (int i = 0; i < rawPoints.length - 1; i++) {
-            totalDistanceOfPath += Point.distanceBetweenTwoPoints(rawPoints[i], rawPoints[i+1]);
-        }
-        return totalDistanceOfPath;
-    }
+
 
 
 }

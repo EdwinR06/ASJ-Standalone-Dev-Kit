@@ -37,7 +37,6 @@ public class PathTest {
                 assertEquals(0, path.getWayPoints().get(i).deltaYFromPrevious, 0.000001);
                 assertEquals(0, path.getWayPoints().get(i).distanceFromPrevious, 0.000001);
                 assertEquals(0, path.getWayPoints().get(i).distanceFromStart, 0.000001);
-                assertEquals(10, path.getWayPoints().get(i).distanceFromEnd, 0.000001);
             } else {
                 assertEquals(expected.get(i).getX()-expected.get(i-1).getX(), path.getWayPoints().get(i).deltaXFromPrevious, 0.00001);
                 assertEquals(expected.get(i).getY()-expected.get(i-1).getY(), path.getWayPoints().get(i).deltaYFromPrevious, 0.00001);
@@ -81,28 +80,56 @@ public class PathTest {
     @Test
     public void testInvalidArgumentOfPath() {
         try{
-            Point[] points = new Point[] {new Point(2,5), new Point(4,4)};
+            Point[] points = new Point[] {new Point(4,4)};
             Path path = new Path(points);
             fail("Expected Illegal Argument Exception");
         } catch (IllegalArgumentException e){
             // What we wanted
         }
+        try {
+            Point[] points = new Point[] {new Point(4,4), new Point(4,4)};
+            Path path = new Path(points);
+            fail("Expected Illegal Argument Exception because of duplicate points");
+        } catch (IllegalArgumentException e){
+            // This is good
+        }
     }
 
     @Test
     public void testTargetPoint() {
-        Point current = new Point(1,3);
         Point[] points = new Point[] {new Point(0,0), new Point(0,5), new Point(5, 5), new Point(5,7)};
         Path path = new Path(points);
-
-        Point expected = new Point(0,5);
-
+        Point current = new Point(1,3);
         WayPoint actual = path.targetPoint(current, 2);
+        assertEquals(new Point(0,5), actual.point);
 
-        Point actualPoint = actual.point;
+        current = new Point(0,-1);
+        actual = path.targetPoint(current, 2);
+        assertEquals(new Point(0,1), actual.point);
 
-        assertEquals(expected, actualPoint);
+        current = new Point(0,-5);
+        actual = path.targetPoint(current, 2);
+        assertEquals(new Point(0,-3), actual.point);
 
+        current = new Point(4,5);
+        actual = path.targetPoint(current, 2);
+        assertEquals(new Point(5,6), actual.point);
+
+        current = new Point(5,8);
+        actual = path.targetPoint(current, 2);
+        assertEquals(new Point(5,7), actual.point);
+
+        current = new Point(0,5);
+        actual = path.targetPoint(current, 2);
+        assertEquals(new Point(2,5), actual.point);
+
+        current = new Point(0,5);
+        actual = path.targetPoint(current, 20);
+        assertEquals(new Point(5,7), actual.point);
+
+        current = new Point(4,4);
+        actual = path.targetPoint(current, 3);
+        assertEquals(new Point(2,5), actual.point);
     }
 
     @Test
@@ -112,5 +139,15 @@ public class PathTest {
         Path path = new Path(points);
 
         assertEquals(10, path.targetPoint(current, 10).distanceFromStart, 0.0000001);
+    }
+
+
+    @Test
+    public void distanceFromEnd() {
+        Point current = new Point(0,0);
+        Point[] points = new Point[] {new Point(0,0), new Point(0,5), new Point(5, 5), new Point(5,7)};
+        Path path = new Path(points);
+
+        assertEquals(2, path.distanceFromEnd(path.targetPoint(current, 10).distanceFromStart), 0.0000001);
     }
 }

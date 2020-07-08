@@ -17,27 +17,38 @@ public class Path {
         if (rawPoints.length < 2) {
             throw new IllegalArgumentException("Tried to create a path with too few points.");
         }
-        distanceOfPath += rawPoints[0].totalDistanceOfPath(rawPoints);
+        distanceOfPath += totalDistanceOfPath(rawPoints);
         double distanceToStart = 0;
-        double distanceToEnd = 0;
+
         wayPoints = new ArrayList<>();
 
 
-        WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0, 0, 0);
+        WayPoint firstWayPoint = new WayPoint(rawPoints[0], 0, 0, 0, 0);
         pathWayPoints.add(firstWayPoint);
         for (int i = 1; i < rawPoints.length; i++) {
             double distanceFromPreviousWayPoint = rawPoints[i].distanceToPoint(rawPoints[i - 1]);
             distanceToStart += distanceFromPreviousWayPoint;
-            distanceToEnd += distanceOfPath - distanceToStart;
+
             if (!rawPoints[i].equals(rawPoints[i - 1])) {
-                pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX() - rawPoints[i - 1].getX(), rawPoints[i].getY() - rawPoints[i - 1].getY(), rawPoints[i].distanceToPoint(rawPoints[i - 1]), distanceToStart, distanceToEnd));
+                pathWayPoints.add(new WayPoint(rawPoints[i], rawPoints[i].getX() - rawPoints[i - 1].getX(), rawPoints[i].getY() - rawPoints[i - 1].getY(), rawPoints[i].distanceToPoint(rawPoints[i - 1]), distanceToStart));
             }
+        }
+        if (pathWayPoints.size() < 2) {
+            throw new IllegalArgumentException("Path must have two unique points.");
         }
     }
 
 
     public ArrayList<WayPoint> getWayPoints() {
         return pathWayPoints;
+    }
+
+    public double totalDistanceOfPath(Point[] rawPoints) {
+        double totalDistanceOfPath = 0;
+        for (int i = 0; i < rawPoints.length - 1; i++) {
+            totalDistanceOfPath += Point.distanceBetweenTwoPoints(rawPoints[i], rawPoints[i + 1]);
+        }
+        return totalDistanceOfPath;
     }
 
 
@@ -60,29 +71,33 @@ public class Path {
      * Note that the point will usually be interpolated between the points that originally defined the Path
      */
     public WayPoint targetPoint(Point current, double targetDistance) {
-        int i = 1;
-        while (pathWayPoints.get(i).componentAlongPath(current) < 0) {
-            i++;
-            if (i == pathWayPoints.size() - 1) {
-                return pathWayPoints.get(i);
-            }
-        }
-        double remainingDistance;
-        remainingDistance = targetDistance - pathWayPoints.get(i).componentAlongPath(current);
-        while (remainingDistance > 0 && i < pathWayPoints.size() - 1) {
-            i++;
-            remainingDistance -= pathWayPoints.get(i).distanceFromPrevious;
+        int iNext = 1;
+        //Find the next WayPoint ahead of current point
+        while (pathWayPoints.get(iNext).componentAlongPath(current) <= 0 && iNext < pathWayPoints.size() - 1) {
+            iNext++;
 
         }
-        remainingDistance += pathWayPoints.get(i).distanceFromPrevious;
-        Point firstWayPointForInterpolation = pathWayPoints.get(i - 1).point;
-        Point secondWayPointForInterpolation = pathWayPoints.get(i).point;
+        double remainingDistance;
+        remainingDistance = targetDistance - pathWayPoints.get(iNext).componentAlongPath(current);
+        while (remainingDistance > 0 && iNext < pathWayPoints.size() - 1) {
+            iNext++;
+            remainingDistance -= pathWayPoints.get(iNext).distanceFromPrevious;
+
+        }
+        //Check to see if we run out of WayPoints before target distance
+        if(remainingDistance > 0){
+            return pathWayPoints.get(iNext);
+        }
+
+        remainingDistance += pathWayPoints.get(iNext).distanceFromPrevious;
+        Point firstWayPointForInterpolation = pathWayPoints.get(iNext - 1).point;
+        Point secondWayPointForInterpolation = pathWayPoints.get(iNext).point;
         LineSegment ls = new LineSegment(firstWayPointForInterpolation, secondWayPointForInterpolation);
         Point target = ls.interpolate(remainingDistance);
 
-        double distFromStart = remainingDistance + pathWayPoints.get(i - 1).distanceFromStart;
+        double distFromStart = remainingDistance + pathWayPoints.get(iNext - 1).distanceFromStart;
 
-        return new WayPoint(target, target.getX() - firstWayPointForInterpolation.getX(), target.getY() - secondWayPointForInterpolation.getY(), remainingDistance, distFromStart, distanceOfPath - distFromStart);
+        return new WayPoint(target, target.getX() - firstWayPointForInterpolation.getX(), target.getY() - secondWayPointForInterpolation.getY(), remainingDistance, distFromStart);
     }
 
 
@@ -227,6 +242,14 @@ public class Path {
         }
         return targetWayPoint;*/
 
+    public double distanceFromEnd(double distanceToStart) {
+        double distanceToEnd = 0;
+
+
+        distanceToEnd += distanceOfPath - distanceToStart;
+
+        return distanceToEnd;
+    }
 
     /**
      * Find the index of the WayPoint that is just ahead of current on the path
@@ -252,15 +275,15 @@ public class Path {
         public double deltaYFromPrevious;
         public double distanceFromPrevious;
         public double distanceFromStart;
-        public double distanceFromEnd;
 
-        public WayPoint(Point point, double deltaXFromPrevious, double deltaYFromPrevious, double distanceFromPrevious, double distanceFromStart, double distanceFromEnd) {
+
+        public WayPoint(Point point, double deltaXFromPrevious, double deltaYFromPrevious, double distanceFromPrevious, double distanceFromStart) {
             this.point = point;
             this.deltaXFromPrevious = deltaXFromPrevious;
             this.deltaYFromPrevious = deltaYFromPrevious;
             this.distanceFromPrevious = distanceFromPrevious;
             this.distanceFromStart = distanceFromStart;
-            this.distanceFromEnd = distanceFromEnd;
+
         }
 
         /**
@@ -281,13 +304,7 @@ public class Path {
             double dp = deltaXFromCurrent * deltaXFromPrevious + deltaYFromCurrent * deltaYFromPrevious;
             double projection = dp / distanceFromPrevious;
 
-            if(projection < 0){
-                return 0;
-            }else if(projection > distanceFromPrevious){
-                return distanceFromPrevious;
-            }else{
-                return projection;
-            }
+            return projection;
         }
     }
 }
