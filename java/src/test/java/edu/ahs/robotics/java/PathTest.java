@@ -42,7 +42,7 @@ public class PathTest {
                 assertEquals(expected.get(i).getX()-expected.get(i-1).getX(), path.getWayPoints().get(i).deltaXFromPrevious, 0.00001);
                 assertEquals(expected.get(i).getY()-expected.get(i-1).getY(), path.getWayPoints().get(i).deltaYFromPrevious, 0.00001);
                 assertEquals(Point.distanceBetweenTwoPoints(expected.get(i), expected.get(i-1)), path.getWayPoints().get(i).distanceFromPrevious, 0.00001);
-                assertEquals();
+
             }
         }
 
@@ -103,5 +103,14 @@ public class PathTest {
 
         assertEquals(expected, actualPoint);
 
+    }
+
+    @Test
+    public void testDistanceFromStart() {
+        Point current = new Point(0,0);
+        Point[] points = new Point[] {new Point(0,0), new Point(0,5), new Point(5, 5), new Point(5,7)};
+        Path path = new Path(points);
+
+        assertEquals(10, path.targetPoint(current, 10).distanceFromStart, 0.0000001);
     }
 }

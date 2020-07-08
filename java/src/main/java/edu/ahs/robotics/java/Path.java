@@ -10,14 +10,14 @@ public class Path {
      */
     private ArrayList<WayPoint> pathWayPoints = new ArrayList<>();
     List<WayPoint> wayPoints;
+    double distanceOfPath = 0;
 
     public Path(Point[] rawPoints) {
 
         if (rawPoints.length < 2) {
             throw new IllegalArgumentException("Tried to create a path with too few points.");
         }
-
-        double distanceOfPath = rawPoints[0].totalDistanceOfPath(rawPoints);
+        distanceOfPath += rawPoints[0].totalDistanceOfPath(rawPoints);
         double distanceToStart = 0;
         double distanceToEnd = 0;
         wayPoints = new ArrayList<>();
@@ -80,7 +80,9 @@ public class Path {
         LineSegment ls = new LineSegment(firstWayPointForInterpolation, secondWayPointForInterpolation);
         Point target = ls.interpolate(remainingDistance);
 
-        return new WayPoint(target, target.getX() - firstWayPointForInterpolation.getX(), target.getY() - secondWayPointForInterpolation.getY(), remainingDistance);
+        double distFromStart = remainingDistance + pathWayPoints.get(i - 1).distanceFromStart;
+
+        return new WayPoint(target, target.getX() - firstWayPointForInterpolation.getX(), target.getY() - secondWayPointForInterpolation.getY(), remainingDistance, distFromStart, distanceOfPath - distFromStart);
     }
 
 
