@@ -12,16 +12,32 @@ public class GridLoggerTest {
     @Test
     public void writeLn() {
         TestWriter writer = new TestWriter();
-        GridLogger gridLogger = new GridLogger(writer);
+        TestClock clock = new TestClock();
+        clock.setTime(1);
+        GridLogger gridLogger = new GridLogger(writer, clock);
         gridLogger.add("RobotX", "2.4");
         gridLogger.add("RobotY", "1.8");
         gridLogger.writeLn();
 
+        gridLogger.add("RobotX", "3.6");
+        gridLogger.add("UnknownCategory", "x");
+        //Not adding RobotY
+        gridLogger.writeLn();
+
+        gridLogger.add("RobotY", "2.1");
+        gridLogger.add("RobotY", "4.2");
+        clock.setTime(2);
+        gridLogger.writeLn();
+
+
         List lines = writer.getLines();
         // check the lines
 
-        assertEquals("[RobotX, RobotY]", lines.get(0));
-        assertEquals("[2.4,1.8]", lines.get(1));
+        assertEquals("Time,RobotX,RobotY", lines.get(0));
+        assertEquals("1.0,2.4,1.8", lines.get(1));
+        assertEquals("1.0,3.6,", lines.get(2));
+        assertEquals("2.0,,4.2", lines.get(3));
+        assertTrue(clock.resetCalled);
     }
 
     private class TestWriter implements LogWriter {
@@ -35,6 +51,30 @@ public class GridLoggerTest {
 
         public List getLines() {
             return lines;
+        }
+    }
+
+    private class TestClock implements Clock {
+        private long startTime;
+        private long currentTime;
+        private boolean resetCalled = false;
+
+        @Override
+        public double getCurrentTime(){
+            return currentTime;
+        }
+
+        @Override
+        public void reset() {
+            resetCalled = true;
+        }
+
+        public boolean isResetCalled() {
+            return resetCalled;
+        }
+
+        public void setTime(long time){
+            currentTime = time;
         }
     }
 }

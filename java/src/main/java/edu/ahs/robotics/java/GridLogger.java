@@ -1,25 +1,27 @@
 package edu.ahs.robotics.java;
 
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
 public class GridLogger {
-
+    private Clock clock;
+    private double elapsedTime;
     private LogWriter writer;
-    private HashSet<String> categories;
-    private HashMap<String, String> values;
-    private boolean noTitleRow = true;
-    //private ArrayList<String>  categoryTicker = new ArrayList<>();
+    private HashSet<String> categorySet;
+    private HashMap<String, String> rowData;
+    private boolean firstRow = true;
+    private ArrayList<String> categories = new ArrayList<>();
 
-    public GridLogger(LogWriter writer) {
+
+    public GridLogger(LogWriter writer, Clock clock) {
         this.writer = writer;
-        categories = new HashSet<>();
-        values = new HashMap<>();
+        this.clock = clock;
+        categorySet = new HashSet<>();
+        rowData = new HashMap<>();
+        clock.reset();
+        categories.add("Time");
     }
 
     /**
@@ -30,18 +32,12 @@ public class GridLogger {
      * @param value
      */
     public void add(String category, String value) {
-        if (categories.contains(category)) {
-            //Add the value the value to the HashMap
-            values.put(category, value);
-        } else {
+        if (firstRow && !categorySet.contains(category)) {
+            //Add the category to our list and set of categories
+            categorySet.add(category);
             categories.add(category);
-
-
-            //Add both the category and the value to the HashMap
-            values.put(category, category);
-            values.put(category, value);
-
         }
+        rowData.put(category, value);
     }
 
     /**
@@ -50,20 +46,36 @@ public class GridLogger {
      * and calls to add() will add values to the next line of data.
      */
     public void writeLn() {
-        for (int i = 0; i < values.size(); i++) {
-            if (noTitleRow == true) {
-                StringBuffer notCategory = new StringBuffer();
-                notCategory.append(categories);
-
-                writer.writeLine(notCategory.toString());
-                noTitleRow = false;
-            } else {
-                StringBuffer categoriesInPlace = new StringBuffer();
-                categoriesInPlace.append(values);
-                writer.writeLine(categoriesInPlace.toString());
+        //Write the title row if this is the first call to writeLn
+        if (firstRow) {
+            StringBuffer titleLine = new StringBuffer();
+            for (int i = 0; i < categories.size(); i++) {
+                titleLine.append(categories.get(i));
+                if (i < categories.size() - 1) {
+                    titleLine.append(",");
+                }
+            }
+            writer.writeLine(titleLine.toString());
+            firstRow = false;
+        }
+        //Update the time
+        rowData.put("Time", Double.toString(clock.getCurrentTime()));
+        //Write the data row
+        StringBuffer dataRow = new StringBuffer();
+        for (int i = 0; i < categories.size(); i++) {
+            String category = categories.get(i);
+            String value = rowData.get(category);
+            if(value != null){
+                dataRow.append(value);
+            }
+            //Avoid adding a comma after the last value
+            if (i < categories.size() - 1) {
+                dataRow.append(",");
             }
         }
 
+        writer.writeLine(dataRow.toString());
+        rowData.clear();
     }
 
     public void stop() {
