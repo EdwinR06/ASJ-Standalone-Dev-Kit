@@ -3,6 +3,7 @@ package edu.ahs.robotics.java;
 
 import com.sun.org.apache.xerces.internal.xs.StringList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.List;
 public class GridLogger {
 
     private LogWriter writer;
-    private HashSet <String> categories;
-    private HashMap <String, String> values;
-    private List<String> logRows;
+    private HashSet<String> categories;
+    private HashMap<String, String> values;
     private boolean noTitleRow = true;
+    //private ArrayList<String>  categoryTicker = new ArrayList<>();
 
     public GridLogger(LogWriter writer) {
         this.writer = writer;
@@ -29,14 +30,17 @@ public class GridLogger {
      * @param value
      */
     public void add(String category, String value) {
-        if(categories.contains(category)){
+        if (categories.contains(category)) {
             //Add the value the value to the HashMap
             values.put(category, value);
         } else {
             categories.add(category);
+
+
             //Add both the category and the value to the HashMap
             values.put(category, category);
             values.put(category, value);
+
         }
     }
 
@@ -46,14 +50,20 @@ public class GridLogger {
      * and calls to add() will add values to the next line of data.
      */
     public void writeLn() {
-        if(noTitleRow == true){
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < categories.size(); i++) {
-                logRows.add(sb.insert(categories));
-            }
+        for (int i = 0; i < values.size(); i++) {
+            if (noTitleRow == true) {
+                StringBuffer notCategory = new StringBuffer();
+                notCategory.append(categories);
 
+                writer.writeLine(notCategory.toString());
+                noTitleRow = false;
+            } else {
+                StringBuffer categoriesInPlace = new StringBuffer();
+                categoriesInPlace.append(values);
+                writer.writeLine(categoriesInPlace.toString());
+            }
         }
-       writer.writeLine("something");
+
     }
 
     public void stop() {

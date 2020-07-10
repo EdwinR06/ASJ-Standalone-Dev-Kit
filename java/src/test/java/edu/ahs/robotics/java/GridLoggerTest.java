@@ -20,8 +20,8 @@ public class GridLoggerTest {
         List lines = writer.getLines();
         // check the lines
 
-        assertEquals("RobotX,RobotY", lines.get(0));
-        assertEquals("2.4,1.8", lines.get(1));
+        assertEquals("[RobotX, RobotY]", lines.get(0));
+        assertEquals("[2.4,1.8]", lines.get(1));
     }
 
     private class TestWriter implements LogWriter {
