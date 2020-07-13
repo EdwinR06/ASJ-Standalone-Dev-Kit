@@ -60,7 +60,7 @@ public class GridLoggerTest {
         private boolean resetCalled = false;
 
         @Override
-        public double getCurrentTime(){
+        public long getCurrentTime(){
             return currentTime;
         }
 

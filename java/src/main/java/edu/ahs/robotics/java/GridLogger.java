@@ -63,9 +63,11 @@ public class GridLogger {
             writer.writeLine(titleLine.toString());
             firstRow = false;
         }
+
         //Update the time
         add(TIME, clock.getCurrentTime());
         //Write the data row
+
         StringBuffer dataRow = new StringBuffer();
         for (int i = 0; i < categories.size(); i++) {
             String category = categories.get(i);
