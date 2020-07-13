@@ -4,6 +4,6 @@ public interface Clock {
     /**
      * Returns time in milliseconds since last call to reset
      * */
-    double getCurrentTime();
+    long getCurrentTime();
     void reset();
 }
