@@ -34,9 +34,9 @@ public class GridLoggerTest {
         // check the lines
 
         assertEquals("Time,RobotX,RobotY", lines.get(0));
-        assertEquals("1.0,2.4,1.8", lines.get(1));
-        assertEquals("1.0,3.6,", lines.get(2));
-        assertEquals("2.0,,4.2", lines.get(3));
+        assertEquals("1,2.4,1.8", lines.get(1));
+        assertEquals("1,3.6,", lines.get(2));
+        assertEquals("2,,4.2", lines.get(3));
         assertTrue(clock.resetCalled);
     }
 
