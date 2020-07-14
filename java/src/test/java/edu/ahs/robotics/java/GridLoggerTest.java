@@ -20,7 +20,7 @@ public class GridLoggerTest {
         gridLogger.writeLn();
 
         gridLogger.add("RobotX", "3.6");
-        gridLogger.add("UnknownCategory", "x");
+        gridLogger.add("UnkownCategory","x");
         //Not adding RobotY
         gridLogger.writeLn();
 

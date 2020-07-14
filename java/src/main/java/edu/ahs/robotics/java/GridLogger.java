@@ -56,7 +56,8 @@ public class GridLogger {
         if (firstRow) {
             StringBuffer titleLine = new StringBuffer();
             for (int i = 0; i < categories.size(); i++) {
-                titleLine.append(categories.get(i));
+                String category = categories.get(i);
+                titleLine.append(category);
                 if (i < categories.size() - 1) {
                     titleLine.append(",");
                 }
