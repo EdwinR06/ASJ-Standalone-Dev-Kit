@@ -51,6 +51,7 @@ public class GridLogger {
      * and calls to add() will add values to the next line of data.
      */
     public void writeLn() {
+
         //Write the title row if this is the first call to writeLn
         if (firstRow) {
             StringBuffer titleLine = new StringBuffer();
@@ -67,7 +68,6 @@ public class GridLogger {
         //Update the time
         add(TIME, clock.getCurrentTime());
         //Write the data row
-
         StringBuffer dataRow = new StringBuffer();
         for (int i = 0; i < categories.size(); i++) {
             String category = categories.get(i);
@@ -80,7 +80,6 @@ public class GridLogger {
                 dataRow.append(",");
             }
         }
-
         writer.writeLine(dataRow.toString());
         rowData.clear();
     }
